@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model
 {
-    protected $fillable = ['amount', 'status', 'code_vnpay','id_kh'];
+    protected $fillable = ['amount','OrderID','status', 'code_vnpay','id_kh'];
     public $timestamps = false;
     protected $primaryKey = 'id_payment';
     protected $table = 'payment';

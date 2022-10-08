@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\DoAn\Nsx;
 use App\Http\Resources\NsxResource;
+use Illuminate\Support\Facades\DB;
 
 class NsxController extends Controller
 {
@@ -16,7 +17,7 @@ class NsxController extends Controller
      */
     public function index()
     {
-      
+
         return Nsx::all();
         // return NsxResource::collection(Nsx::paginate());
     }
@@ -56,7 +57,7 @@ class NsxController extends Controller
      */
     public function show( Nsx $Nsx)
     {
-        
+
         return new NsxResource($Nsx);
     }
 
@@ -87,7 +88,7 @@ class NsxController extends Controller
         // $Nsx = Nsx::find($id);
         // $Nsx ->tenNSX = $data['tenNSX'];
         // $Nsx ->quocGia = $data['quocGia'];
-        // $Nsx ->save(); 
+        // $Nsx ->save();
     }
 
     /**

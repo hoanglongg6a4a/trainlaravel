@@ -5,6 +5,8 @@ namespace App\Http\Controllers\DoAn;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Payment;
+use Illuminate\Support\Facades\DB;
+use PHPUnit\Framework\Constraint\Count;
 
 class PaymentController extends Controller
 {
@@ -13,7 +15,7 @@ class PaymentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-   
+
 
 
 
@@ -59,7 +61,7 @@ class PaymentController extends Controller
 
 
 
-    
+
     // $extraData = $_POST["extraData"];
 
     $requestId = time() . "";
@@ -99,7 +101,7 @@ class PaymentController extends Controller
          * To change this template file, choose Tools | Templates
          * and open the template in the editor.
          */
-      
+
         $vnp_TmnCode = "NKRQ52E0"; //Website ID in VNPAY System
         $vnp_HashSecret = "VATQXAPFIHFDXEHICPTLXBTTUHCSNUIL"; //Secret key
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
@@ -110,7 +112,7 @@ class PaymentController extends Controller
         //Expire
         $startTime = date("YmdHis");
         $expire = date('YmdHis',strtotime('+15 minutes',strtotime($startTime)));
-        
+
 
 
         $vnp_TxnRef = $code; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
@@ -172,7 +174,7 @@ class PaymentController extends Controller
             // "vnp_Inv_Taxcode"=>$vnp_Inv_Taxcode,
             // "vnp_Inv_Type"=>$vnp_Inv_Type
         );
-        
+
         if (isset($vnp_BankCode) && $vnp_BankCode != "") {
             $inputData['vnp_BankCode'] = $vnp_BankCode;
         }
@@ -197,7 +199,7 @@ class PaymentController extends Controller
 
         $vnp_Url = $vnp_Url . "?" . $query;
         if (isset($vnp_HashSecret)) {
-            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret);//  
+            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret);//
             $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
         }
         $returnData = array('code' => '00'
@@ -223,7 +225,7 @@ class PaymentController extends Controller
         }
         //dd($inputData);
 
-        
+
         $vnp_SecureHash = $inputData['vnp_SecureHash'];
         unset($inputData['vnp_SecureHash']);
         ksort($inputData);
@@ -237,70 +239,74 @@ class PaymentController extends Controller
                 $i = 1;
             }
         }
-        
+
         $secureHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
         $vnpTranId = $inputData['vnp_TransactionNo']; //Mã giao dịch tại VNPAY
         $vnp_BankCode = $inputData['vnp_BankCode']; //Ngân hàng thanh toán
-        $vnp_Amount = $inputData['vnp_Amount']/100; // Số tiền thanh toán VNPAY phản hồi
-        
+        $vnp_Amount = $inputData['vnp_Amount']; // Số tiền thanh toán VNPAY phản hồi
+
         $Status = 0; // Là trạng thái thanh toán của giao dịch chưa có IPN lưu tại hệ thống của merchant chiều khởi tạo URL thanh toán.
         $orderId = $inputData['vnp_TxnRef'];
-        
-        $datapay = [
-                             
-            'amount' => $inputData['vnp_Amount'],
-            'status' => 'Hoàn Thành',
-            'code_vnpay' => $inputData['vnp_TransactionNo'],
-            'id_kh' => '113',
-        ];
-         Payment::insert($datapay);
+        $Status =  $inputData['vnp_ResponseCode'];
 
-            //Check Orderid    
-            //Kiểm tra checksum của dữ liệu
-            if ($secureHash == $vnp_SecureHash) {
-                //Lấy thông tin đơn hàng lưu trong Database và kiểm tra trạng thái của đơn hàng, mã đơn hàng là: $orderId            
-                //Việc kiểm tra trạng thái của đơn hàng giúp hệ thống không xử lý trùng lặp, xử lý nhiều lần một giao dịch
-                //Giả sử: $order = mysqli_fetch_assoc($result);   
-        
-                $order = NULL;
-                if ($order != NULL) {
-                    if($order["Amount"] == $vnp_Amount) //Kiểm tra số tiền thanh toán của giao dịch: giả sử số tiền kiểm tra là đúng. //$order["Amount"] == $vnp_Amount
+
+        if($Status='00' && $secureHash == $vnp_SecureHash)
+        {
+            $get = DB::table('payment')
+	        ->select('OrderId')
+	        ->get();
+              //return response($get);
+
+                    if(empty($get))
                     {
-                        if ($order["Status"] != NULL && $order["Status"] == 0) {
-                            if ($inputData['vnp_ResponseCode'] == '00' || $inputData['vnp_TransactionStatus'] == '00') {
-                                $Status = 1; // Trạng thái thanh toán thành công
-                            } else {
-                                $Status = 2; // Trạng thái thanh toán thất bại / lỗi
-                            }
-                            
-                            
-                            ;
-                            //Trả kết quả về cho VNPAY: Website/APP TMĐT ghi nhận yêu cầu thành công                
-                            $returnData['RspCode'] = '00';
-                            $returnData['Message'] = 'Confirm Success';
-                        } else {
-                            $returnData['RspCode'] = '02';
-                            $returnData['Message'] = 'Order already confirmed';
-                        }
-                    }
-                    else {
-                        $returnData['RspCode'] = '04';
-                        $returnData['Message'] = 'invalid amount';
-                    }
-                } else {
-                    $returnData['RspCode'] = '01';
-                    $returnData['Message'] = 'Order not found';
-                }
-            } else {
-                $returnData['RspCode'] = '97';
-                $returnData['Message'] = 'Invalid signature';
-            }
-    } 
-      
-        
-        
 
-    
+                        $datapay = [
+                            'OrderID'=> $orderId,
+                            'amount' => $vnp_Amount,
+                            'status' => 'Hoàn Thành',
+                            'code_vnpay' => $vnpTranId,
+                            'id_kh' => '113',
+                        ];
+                        Payment::insert($datapay);
+                        return response($orderId);
+
+                    }
+                    else
+                    {
+
+                                foreach( $get as $key => $value )
+                                {
+
+                                    $arr[]= get_object_vars($value);
+                                    $return = $arr[$key];
+                                    $id = $return['OrderId'];
+                                    if( $id == $orderId)
+                                    {
+                                        $orderId++;
+
+                                    }
+                                }
+
+                                    $datapay = [
+                                        'OrderID'=> $orderId,
+                                        'amount' => $vnp_Amount,
+                                        'status' => 'Hoàn Thành',
+                                        'code_vnpay' => $vnpTranId,
+                                        'id_kh' => '113',
+                                    ];
+                                    Payment::insert($datapay);
+                                    //return response($orderId);
+
+
+
+                    }
+            }
+        }
+
+
+
+
+
     public function index()
     {
         //

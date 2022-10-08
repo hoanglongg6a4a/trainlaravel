@@ -55,7 +55,7 @@ class NccController extends Controller
      */
     public function show( Ncc $Ncc)
     {
-        
+
         return new NccResource($Ncc);
     }
 
@@ -91,7 +91,7 @@ class NccController extends Controller
      */
     public function destroy(Ncc $Ncc)
     {
-        
+
         $Ncc->delete();
     }
 }
