@@ -276,10 +276,11 @@ class PaymentController extends Controller
 
                                 foreach( $get as $key => $value )
                                 {
-
-                                    $arr[]= get_object_vars($value);
-                                    $return = $arr[$key];
-                                    $id = $return['OrderId'];
+                                    
+                                   $arr[]= get_object_vars($value);
+                                   $return = $arr[$key];
+                                   $id = $return['OrderId'];
+                                
                                     if( $id == $orderId)
                                     {
                                         $orderId++;
@@ -296,6 +297,7 @@ class PaymentController extends Controller
                                     ];
                                     Payment::insert($datapay);
                                     //return response($orderId);
+                                
 
 
 
