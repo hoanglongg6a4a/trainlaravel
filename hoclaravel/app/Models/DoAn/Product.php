@@ -11,4 +11,9 @@ class Product extends Model
     public $timestamps = false;
     protected $primaryKey = 'id_sanpham';
     protected $table = 'Product';
+
+    public function loaisp()
+    {
+        return $this->belongsTo(loaisp::class,'maLoai','maLoai');
+    }
 }

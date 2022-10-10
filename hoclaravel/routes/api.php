@@ -23,11 +23,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 //Api sản phẩm
 Route::resource('products', ProductController::class);
-Route::resource('products/add', ProductController::class)->only('store');
-Route::delete('products/delete/{id}', [ProductController::class,'destroy']);
-Route::get('products/edit/{id}', [ProductController::class,'edit']);
-Route::put('products/update/{id}', [ProductController::class,'update']);
-        // Chi tiết sản phẩm 
+
+// Route::resource('products/add', ProductController::class)->only('store');
+// Route::delete('products/delete/{id}', [ProductController::class,'destroy']);
+// Route::get('products/edit/{id}', [ProductController::class,'edit']);
+// Route::put('products/update/{id}', [ProductController::class,'update']);
+        // Chi tiết sản phẩm
         Route::get('products/chitiet/{id}', [ProductController::class,'ctsp']);
 // Api ncc , nsx
 Route::resource('ncc', NccController::class);

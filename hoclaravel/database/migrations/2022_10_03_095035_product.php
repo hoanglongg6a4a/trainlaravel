@@ -17,7 +17,11 @@ return new class extends Migration
             $table->bigIncrements('id_sanpham');
             $table->string('TenSP');
             $table->integer('Gia');
+            $table->integer('soLuong');
             $table->string('Mota');
+            $table->string('ctSanPham');
+            $table->string('hinh');
+            $table->integer('maLoai');
             $table->timestamps();
         });
     }
@@ -32,3 +36,9 @@ return new class extends Migration
         Schema::dropIfExists('product');
     }
 };
+
+
+// protected $fillable = ['TenSP','Gia','soLuong','Mota','ctSanPham','hinh','maLoai'];
+// public $timestamps = false;
+// protected $primaryKey = 'id_sanpham';
+// protected $table = 'Product';

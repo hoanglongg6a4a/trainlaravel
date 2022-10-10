@@ -24,15 +24,21 @@ class ProductController extends Controller
     {
          //$product= new Product ;
          //return $product::all(Product::paginate(2));
-      
-         $prd = DB::table('product')->paginate();
+
+         $prd = Product::paginate();
          return $prd;
         //return ProductResource::collection(Product::paginate(2));
     }
-    public function ctsp($id)
+    public function ctsp($product)
     {
-        $product = Product::find($id);
-        return $product;
+        $LoaiSP=Product::find($product);
+        $tenLoai= $LoaiSP->loaisp->tenLoai;
+        $product = Product::find($product);
+        return response()->json([
+            'sanPham'=>$product,
+            'product'=>$tenLoai,
+            ]);
+
     }
 
     /**
@@ -40,9 +46,9 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($id)
+    public function create($product)
     {
-       
+
     }
 
     /**
@@ -64,7 +70,7 @@ class ProductController extends Controller
         $product->id_sanpham = $request->id_sanpham;
         $product->TenSP = $request->TenSP;
         $product->Gia = $request->Gia;
-        $product->soLuong = $request->soLuong; 
+        $product->soLuong = $request->soLuong;
         $product->Mota= $request->Mota;
         $product->ctSanPham = $request->ctSanPham;
         $product->maLoai = $request->maLoai;
@@ -115,12 +121,12 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,$id)
+    public function update(Request $request,$product)
     {
-        $product =  Product::find($id);
+        $product =  Product::find($product);
         $product->TenSP = $request->TenSP;
         $product->Gia = $request->Gia;
-        $product->soLuong = $request->soLuong; 
+        $product->soLuong = $request->soLuong;
         $product->Mota= $request->Mota;
         $product->ctSanPham = $request->ctSanPham;
         $product->maLoai = $request->maLoai;
@@ -147,10 +153,11 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($product)
     {
-        $product = Product::find($id);
+        $product = Product::find($product);
         $product->delete();
-        return response($product);  
+        return response($product);
     }
+
 }

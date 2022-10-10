@@ -11,4 +11,9 @@ class loaisp extends Model
     public $timestamps = false;
     protected $primaryKey = 'maLoai';
     protected $table = 'loaisp';
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }
