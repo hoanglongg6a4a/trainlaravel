@@ -6,6 +6,7 @@ use  App\Http\Controllers\DoAn\ProductController;
 use  App\Http\Controllers\DoAn\NccController;
 use  App\Http\Controllers\DoAn\NsxController;
 use  App\Http\Controllers\DoAn\PaymentController;
+use  App\Http\Controllers\DoAn\CartController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -30,6 +31,9 @@ Route::resource('products', ProductController::class);
 // Route::put('products/update/{id}', [ProductController::class,'update']);
         // Chi tiết sản phẩm
         Route::get('products/chitiet/{id}', [ProductController::class,'ctsp']);
+//Api giỏ hàng
+Route::post('add-to-cart', [CartController::class,'addtocart']);
+
 // Api ncc , nsx
 Route::resource('ncc', NccController::class);
 Route::resource('nsx', NsxController::class);

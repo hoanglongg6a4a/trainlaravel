@@ -13,16 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('payments', function (Blueprint $table) {
-            $table->id();
-            $table->string('payment_id');
-            $table->string('payer_id');
-            $table->float('amount,10,2');
-            $table->string('currency');
-            $table->string('payments_status');
+        // Schema::create('payments', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->string('payment_id');
+        //     $table->string('payer_id');
+        //     $table->float('amount,10,2');
+        //     $table->string('currency');
+        //     $table->string('payments_status');
 
-            $table->timestamps();
-        });
+        //     $table->timestamps();
+        // });
     }
 
     /**

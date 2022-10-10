@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $fillable = ['TenSP','Gia','soLuong','Mota','ctSanPham','hinh','maLoai'];
+    protected $fillable = ['TenSP','soLuongSP','hinh','maLoai','maNSX','maNCC','gia','baohanh','description','detailProduc'];
     public $timestamps = false;
-    protected $primaryKey = 'id_sanpham';
-    protected $table = 'Product';
+    protected $primaryKey = 'maSP';
+    protected $table = 'sanpham';
 
     public function loaisp()
     {

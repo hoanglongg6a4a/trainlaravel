@@ -5,10 +5,9 @@ namespace App\Models\DoAn;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Nsx extends Model
+class Cart extends Model
 {
-    protected $fillable = ['tenNSX','quocGia'];
+    protected $fillable = ['maKH','maSP','soLuongSP'];
     public $timestamps = false;
-    protected $primaryKey = 'maNSX';
-    protected $table = 'nhasanxuat';
+    protected $table = 'cart';  
 }

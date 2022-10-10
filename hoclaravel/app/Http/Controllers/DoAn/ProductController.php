@@ -9,7 +9,8 @@ use App\Models\DoAn\loaisp;
 use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
-use File;
+// use File;
+use Illuminate\Support\Facades\File;
 use Omnipay\Common\Message\ResponseInterface;
 use PhpParser\Node\Expr\Isset_;
 
@@ -67,13 +68,16 @@ class ProductController extends Controller
         // $product = Product::create($request->all());
         // return new ProductResource($product);
         $product = new Product();
-        $product->id_sanpham = $request->id_sanpham;
-        $product->TenSP = $request->TenSP;
-        $product->Gia = $request->Gia;
-        $product->soLuong = $request->soLuong;
-        $product->Mota= $request->Mota;
-        $product->ctSanPham = $request->ctSanPham;
+        $product->maSP = $request->maSP;
+        $product->tenSP = $request->tenSP;
+        $product->soLuongSP = $request->soLuongSP;
         $product->maLoai = $request->maLoai;
+        $product->maNSX = $request->maNSX;
+        $product->maNCC = $request->maNCC;
+        $product->gia = $request->gia;
+        $product->baoHanh = $request->baoHanh;
+        $product->description= $request->description;
+        $product->detailProduct= $request->detailProduct;
         if($request->hasFile('hinh'))
         {
             $hinh = $request->file('hinh');
@@ -124,12 +128,15 @@ class ProductController extends Controller
     public function update(Request $request,$product)
     {
         $product =  Product::find($product);
-        $product->TenSP = $request->TenSP;
-        $product->Gia = $request->Gia;
-        $product->soLuong = $request->soLuong;
-        $product->Mota= $request->Mota;
-        $product->ctSanPham = $request->ctSanPham;
+        $product->tenSP = $request->tenSP;
+        $product->soLuongSP = $request->soLuongSP;
         $product->maLoai = $request->maLoai;
+        $product->maNSX = $request->maNSX;
+        $product->maNCC = $request->maNCC;
+        $product->gia = $request->gia;
+        $product->baoHanh = $request->baoHanh;
+        $product->description= $request->description;
+        $product->detailProduct= $request->detailProduct;
         if($request->hasFile('hinh'))
         {
             $hinh = $request->file('hinh');
