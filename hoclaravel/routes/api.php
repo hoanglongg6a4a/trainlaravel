@@ -32,7 +32,7 @@ Route::resource('products', ProductController::class);
         // Chi tiết sản phẩm
         Route::get('products/chitiet/{id}', [ProductController::class,'ctsp']);
 //Api giỏ hàng
-Route::post('add-to-cart', [CartController::class,'addtocart']);
+Route::post('addtocart', [CartController::class,'addtocart']);
 
 // Api ncc , nsx
 Route::resource('ncc', NccController::class);

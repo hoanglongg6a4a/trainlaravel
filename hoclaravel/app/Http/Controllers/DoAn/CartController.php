@@ -18,7 +18,7 @@ class CartController extends Controller
             $spCheck = Product::where('maSP',$maSP)->first();
             if($spCheck)
             {
-                    if(Cart::where('maSP',$maSP)->where('maKH',$maKH)->exist())
+                    if(Cart::where('maSP',$maSP)->where('maKH',$maKH)->exists())
                     {
                         return response()->json([
                             'status'=>409 ,

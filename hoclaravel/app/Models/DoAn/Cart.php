@@ -9,5 +9,5 @@ class Cart extends Model
 {
     protected $fillable = ['maKH','maSP','soLuongSP'];
     public $timestamps = false;
-    protected $table = 'cart';  
+    protected $table = 'cart';
 }
