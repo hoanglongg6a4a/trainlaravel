@@ -215,20 +215,20 @@ class PaymentController extends Controller
 
         if($Status='00' && $secureHash == $vnp_SecureHash)
         {
-            $get = DB::table('payment')
-	        ->select('OrderId')
+            $get = DB::table('phieuxuat')
+	        ->select('maPX')
 	        ->get();
               //return response($get);
 
                     if(empty($get))
                     {
-
+                        $ngayMua=getdate();
                         $datapay = [
-                            'OrderID'=> $orderId,
-                            'amount' => $vnp_Amount,
-                            'status' => 'Hoàn Thành',
-                            'code_vnpay' => $vnpTranId,
-                            'id_kh' => '113',
+                            'maPX'=> $orderId,
+                            'maKH'=> '1',
+                            'ngayMua' => $ngayMua,
+                            'tinhTrang' => 'Hoàn Thành',
+
                         ];
                         Payment::insert($datapay);
                         return response($orderId);
